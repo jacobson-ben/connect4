@@ -71,18 +71,13 @@ function makeHtmlBoard() {
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
   //find lowest empty spot and returns y otherwise return null
-  let counter = 0;
-  for (let space in board) {
-    if (board[space][x] === 1) {
-      counter++;
+  for(let y = HEIGHT-1; y >= 0; y--) {
+    if(!board[y][x]) {
+      return y
     }
-  }
-  if (HEIGHT === counter) {
-    return null;
-  }
-  return (HEIGHT -1) - counter;
+  } 
+  return null
 }
-
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
@@ -98,7 +93,7 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // pop up alert message
-  alert(`P${currPlayer} wins!`);
+  setTimeout(() => alert(`P${currPlayer} wins!`), 500);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -116,7 +111,7 @@ function handleClick(evt) {
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
 
-  board[y][x] = 1;
+  board[y][x] = currPlayer;
 
   placeInTable(y, x);
 
@@ -131,7 +126,7 @@ function handleClick(evt) {
   // TODO: check if all cells in board are filled; if so call, call endGame
 
     for(let column of board) {
-       if(column.every(cell => cell === 1)) {
+       if(column.every(cell => cell === 1 || 2)) {
          endGame
        }
     }
@@ -158,20 +153,18 @@ function checkForWin() {
     //return true if all true
 
     //---------------- will need to be adjusted for cells
-    
-    // for (let coord in cells) {
-    //   let validCheck = (cells[coord][0] >= 0 && cells[coord][0] <=5 && cells[coord][1] >= 0 && cells[coord][1] <= 6) 
-    //   //check that every coordinate div has same player class
-    //   let playerPiece = document.getElementById(`0-0`)
-    //   console.log(playerPiece);
-    //   // if (validCheck) {
-    //   //   //
-    //   // }
-    // }
-
-    
-
+    for (let coord in cells) {
+      let y = cells[coord][0];
+      let x = cells[coord][1]
+      let validCheck = (y >= 0 && y <= HEIGHT - 1 && x >= 0 && x <= WIDTH - 1 && board[y][x] === currPlayer)
+      if(!validCheck) {
+        return false
+      }
+    }
+    return true
   }
+
+  
 
   // using HEIGHT and WIDTH, generate "check list" of coordinates
   // for 4 cells (starting here) for each of the different
