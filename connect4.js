@@ -70,7 +70,17 @@ function makeHtmlBoard() {
 
 function findSpotForCol(x) {
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  //find lowest empty spot and returns y otherwise return null
+  let counter = 0;
+  for (let space in board) {
+    if (board[space][x] === 1) {
+      counter++;
+    }
+  }
+  if (HEIGHT === counter) {
+    return null;
+  }
+  return (HEIGHT -1) - counter;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
@@ -87,7 +97,8 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
+  // pop up alert message
+  alert(`P${currPlayer} wins!`);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -143,6 +154,22 @@ function checkForWin() {
 
     // TODO: Check four cells to see if they're all legal & all color of current
     // player
+    //make sure cells are in range
+    //return true if all true
+
+    //---------------- will need to be adjusted for cells
+    
+    // for (let coord in cells) {
+    //   let validCheck = (cells[coord][0] >= 0 && cells[coord][0] <=5 && cells[coord][1] >= 0 && cells[coord][1] <= 6) 
+    //   //check that every coordinate div has same player class
+    //   let playerPiece = document.getElementById(`0-0`)
+    //   console.log(playerPiece);
+    //   // if (validCheck) {
+    //   //   //
+    //   // }
+    // }
+
+    
 
   }
 
@@ -157,9 +184,9 @@ function checkForWin() {
       // [ [y, x], [y, x], [y, x], [y, x] ]
 
       let horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      let vert;
-      let diagDL;
-      let diagDR;
+      let vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      let diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+      let diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
 
       // find winner (only checking each win-possibility as needed)
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
